@@ -1,0 +1,119 @@
+<!-- BeamFEMForceField example -->
+<?xml version="1.0"?>
+<Node name="root" gravity="0 0 -9810.0" dt="0.01">
+
+  <RequiredPlugin pluginName="SofaOpenglVisual"/>
+  <RequiredPlugin pluginName='SofaBoundaryCondition'/>
+  <RequiredPlugin pluginName='SofaEngine'/>
+  <RequiredPlugin pluginName='SofaGeneralDeformable'/>
+  <RequiredPlugin pluginName='SofaImplicitOdeSolver'/>
+  <RequiredPlugin pluginName='SofaMeshCollision'/>
+  <RequiredPlugin pluginName='SofaMiscCollision'/>
+  <RequiredPlugin pluginName='SofaMiscFem'/>
+  <RequiredPlugin pluginName='SofaLoader'/> <!-- Needed to use components [MeshObjLoader, ]-->
+  <RequiredPlugin pluginName='SofaRigid'/> <!-- Needed to use components [RigidMapping, ]-->
+  <RequiredPlugin pluginName='SofaSimpleFem'/> <!-- Needed to use components [HexahedronFEMForceField, ]-->
+  <RequiredPlugin pluginName='SofaConstraint'/> <!-- Needed to use components [FreeMotionAnimationLoop, GenericConstraintSolver, BilateralInteractionConstraint, UncoupledConstraintCorrection, ]-->
+  <RequiredPlugin pluginName='SofaGeneralLinearSolver'/> <!-- Needed to use components [BTDLinearSolver, ]-->
+  <RequiredPlugin pluginName='SofaGeneralSimpleFem'/> <!-- Needed to use components [BeamFEMForceField, ]-->
+
+  <!-- Debemos poner un FreeMotion para que se consigan resolver los Constraints Billateral de forma correcta -->
+  <FreeMotionAnimationLoop />
+  <GenericConstraintSolver tolerance="0.001" maxIterations="1000"/>
+
+  <VisualStyle displayFlags="showBehavior showForceFields showCollision showWireframe" />
+  <OglGrid size="1000" name="grid"/>
+  <OglLineAxis size="@grid.size"/>
+  <OglSceneFrame/>
+
+  <DefaultPipeline name="DefaultCollisionPipeline"  verbose="0"  draw="0"  depth="6" />
+  <BruteForceDetection name="Detection" />
+  <MinProximityIntersection name="Proximity"  alarmDistance="0.7"  contactDistance="0.09" />
+  <DefaultContactManager name="Response"  response="default" />
+  <DefaultCollisionGroupManager />
+
+    <Node name="AttachOneWay"> <!-- Beam with mass at free end -->
+
+        <Node name="beam" gravity="0 0 -9810.0" >
+
+            <EulerImplicitSolver rayleighStiffness="0.1" printLog="false" rayleighMass="0.1" />
+            <BTDLinearSolver template="BTDMatrix6d" printLog="false" verbose="false" />
+            <MechanicalObject template="Rigid3d" name="beam_DOFs" position="-732.9 0 0 0 0 0 1 -628.2 0 0 0 0 0 1 -523.5 0 0 0 0 0 1 -418.8 0 0 0 0 0 1 -314.1 0 0 0 0 0 1
+                                                                            -209.56 0 0 0 0 0 1 -104.7 0 0 0 0 0 1 0 0 0 0 0 0 1 104.7 0 0 0 0 0 1 209.56 0 0 0 0 0 1
+                                                                            314.1 0 0 0 0 0 1 418.8 0 0 0 0 0 1 523.5 0 0 0 0 0 1 628.2 0 0 0 0 0 1 732.9 0 0 0 0 0 1"/>
+            <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14"/>
+            <UniformMass vertexMass="0.022375 1 [0.001 0 0,0 0.001 0,0 0 0.001]" />
+            <BeamFEMForceField name="FEM" radius="2.7" youngModulus="70e6" poissonRatio="0.33"/>
+            <UncoupledConstraintCorrection/>
+
+            <FixedConstraint name="FixedConstraint" indices="7" />
+
+            <OscillatorConstraint name="OscillatingConstraint1" oscillators="7  0 0 0 0 0 0 1  0 0 10 0 0 0  30 0" />
+
+            <!-- Necesitamos añadir un nodo de Constraint para que se pueda unir luego al nodo Constraint de la masa correspondiente -->
+            <!-- Es necesario colocar el punto de Constraint cerca del extremo de la barra -->
+            <Node name="ConstraintPoint_beam_2">
+                <MechanicalObject name="points_beam" template="Vec3d" position="0 0 0" />
+                <RigidMapping/>
+            </Node>
+
+
+            <!-- Creamos el nodo de Constraint para la masa 2, con su correspondiente posicion, teniendo en cuenta el
+            BarycentricMapping que se ha realizado respecto a las coordenadas del MechanicalObject de la barra -->
+            <Node name="ConstraintPoint_beam_1">
+                <MechanicalObject name="points_beam" template="Vec3d" position="0 0 0" />
+                <RigidMapping/>
+            </Node>
+        </Node>
+
+        <Node name="Mass1" gravity="0 0 -9810.0">
+
+              <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
+              <CGLinearSolver name="Conjugate Gradient" iterations="25" tolerance="1e-5" threshold="1e-5"/>
+
+              <MechanicalObject template="Rigid3d" name="DOF_Mass_1"  position="-711 0 2.11 0.7071068 0 0 0.7071068"/>
+              <UniformMass name="MassSolid1" totalMass="0.0464" />
+              <UncoupledConstraintCorrection />
+
+              <Node name="VisualNode_1">
+                  <MeshObjLoader name="meshLoader_0" filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/Sphere.obj" handleSeams="1" />
+                  <OglModel name="Visual" src="@meshLoader_0"  />
+                  <RigidMapping name="Visual Mapping 1" input="@../"  output="@Visual"/>
+              </Node>
+
+              <Node name="ConstraintPoint_mass_1">
+                  <MechanicalObject name="points_mass_1" template="Vec3d" position="0 0 0&#x09;0 0 0" />
+                  <RigidMapping/>
+              </Node>
+        </Node>
+
+        <!-- Esta sentencia lo que hace es añadir la restricción fija, uniendo los dos objetos por las coordenadas definidas en sus
+        respectivas posiciones, indicando aqui solamente el indice-->
+        <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_2/points_beam" object2="@Mass1/ConstraintPoint_mass_1/points_mass_1" first_point="0" second_point="0" />
+
+        <!--<Node name="Mass2" gravity="0 0 -9810.0">
+
+              <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
+              <CGLinearSolver name="Conjugate Gradient" iterations="25" tolerance="1e-5" threshold="1e-5"/>
+
+              <MechanicalObject template="Rigid3d" name="DOF_Mass_2"  position="711 0 2.11 0.7071068 0 0 0.7071068"/>
+              <UniformMass name="MassSolid2" totalMass="0.0464" />
+              <UncoupledConstraintCorrection />
+
+              <Node name="VisualNode_2">
+                  <MeshObjLoader name="meshLoader_1" filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/Sphere.obj" handleSeams="1" />
+                  <OglModel name="Visual" src="@meshLoader_1"  />
+                  <RigidMapping name="Visual Mapping 2" input="@../"  output="@Visual"/>
+              </Node>
+
+              <Node name="ConstraintPoint_mass_2">
+                  <MechanicalObject name="points_mass_2" template="Vec3d" position="0 0 0&#x09;732.9 0 0" />
+                  <RigidMapping />
+              </Node>
+        </Node>
+
+        <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_1/points_beam" object2="@Mass2/ConstraintPoint_mass_2/points_mass_2" first_point="14" second_point="0" />-->
+
+    </Node>
+
+</Node>

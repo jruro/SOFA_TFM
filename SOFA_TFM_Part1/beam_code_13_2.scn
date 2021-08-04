@@ -1,0 +1,65 @@
+<!-- BeamFEMForceField example -->
+<?xml version="1.0"?>
+<Node name="root" gravity="0 0 -9.8100" dt="0.01">
+
+  <RequiredPlugin pluginName="SofaOpenglVisual"/>
+  <RequiredPlugin pluginName='SofaBoundaryCondition'/>
+  <RequiredPlugin pluginName='SofaEngine'/>
+  <RequiredPlugin pluginName='SofaGeneralDeformable'/>
+  <RequiredPlugin pluginName='SofaImplicitOdeSolver'/>
+  <RequiredPlugin pluginName='SofaMeshCollision'/>
+  <RequiredPlugin pluginName='SofaMiscCollision'/>
+  <RequiredPlugin pluginName='SofaMiscFem'/>
+  <RequiredPlugin pluginName='SofaLoader'/> <!-- Needed to use components [MeshObjLoader, ]-->
+  <RequiredPlugin pluginName='SofaRigid'/> <!-- Needed to use components [RigidMapping, ]-->
+  <RequiredPlugin pluginName='SofaSimpleFem'/> <!-- Needed to use components [HexahedronFEMForceField, ]-->
+  <RequiredPlugin pluginName='SofaConstraint'/> <!-- Needed to use components [FreeMotionAnimationLoop, GenericConstraintSolver, BilateralInteractionConstraint, UncoupledConstraintCorrection, ]-->
+  <RequiredPlugin pluginName='SofaGeneralLinearSolver'/> <!-- Needed to use components [BTDLinearSolver, ]-->
+  <RequiredPlugin pluginName='SofaGeneralSimpleFem'/> <!-- Needed to use components [BeamFEMForceField, ]-->
+
+  <OglGrid size="1" name="grid"/>
+  <OglLineAxis size="@grid.size"/>
+  <OglSceneFrame/>
+
+  <VisualStyle displayFlags="showForceFields showCollisionModels" />
+  <DefaultPipeline depth="6" verbose="0" draw="0" />
+  <BruteForceDetection name="N2" />
+  <MinProximityIntersection name="Proximity" alarmDistance="0.03" contactDistance="0.02" />
+  <DefaultContactManager name="Response" response="default" />
+
+  <Node name="beam">
+      <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
+      <BTDLinearSolver template="BTDMatrix6d" printLog="false" verbose="false" />
+      <MechanicalObject template="Rigid3d" name="DOFs" position="-0.7329 0 0 0 0 0 1 -0.6282 0 0 0 0 0 1 -0.5235 0 0 0 0 0 1 -0.4188 0 0 0 0 0 1 -0.3141 0 0 0 0 0 1 -0.20956 0 0 0 0 0 1 -0.1047 0 0 0 0 0 1
+                                                                  0 0 0 0 0 0 1  0.1047 0 0 0 0 0 1 0.20956 0 0 0 0 0 1 0.3141 0 0 0 0 0 1 0.4188 0 0 0 0 0 1 0.5235 0 0 0 0 0 1 0.6282 0 0 0 0 0 1 0.7329 0 0 0 0 0 1 "/>
+
+      <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14"/>
+
+      <FixedConstraint name="FixedConstraint" indices="7" />
+      <UniformMass template="Rigid3d,RigidMass<3u,double>" name="MassBeam" totalMass="0.17906"/>
+      <BeamFEMForceField name="FEM" radius="0.0026" youngModulus="70e9" poissonRatio="0.33"/>
+
+      <Node name="Collision_beam">
+        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.0075 -0.00151" max="14 0.0075 0.00151" />
+        <MechanicalObject />
+        <BeamLinearMapping isMechanical="true" />
+        <TriangleCollisionModel />
+      </Node>
+
+      <Node name="Collision_mass1">
+          <MechanicalObject />
+          <UniformMass template="Vec3d,double" name="MassBeam" totalMass="0.0464"/>
+          <SphereCollisionModel radius="0.0215" position="-0.711 0 0.00211 0 0 0" />
+          <RigidMapping index="0"/>
+      </Node>
+
+      <Node name="Collision_mass2">
+          <MechanicalObject />
+          <UniformMass template="Vec3d,double" name="MassBeam" totalMass="0.0464"/>
+          <SphereCollisionModel radius="0.0215" position="0.711 0 0.00211 0 0 0" />
+          <RigidMapping index="14"/>
+      </Node>
+
+  </Node>
+
+</Node>
