@@ -1,0 +1,97 @@
+
+--- NEW SESSION: 04/05/2021 18:04:56 ---
+/Attach_1/Mass2/DOF_Mass_2.velocity = 0.102052 -9.96008e-41 -5555.21 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.free_velocity = 0.094875 -9.96008e-41 -6463.13 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.constraint = 3 1 0 1 0 0 0 0 0  
+4 1 0 0 1 0 0 0 0  
+5 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass2/DOF_Mass_2.12(V_DERIV) = -0.000933921 9.8044e-43 -902.046 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.10(V_DERIV) = 0.00502399 0 635.548 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.9(V_DERIV) = 0.333019 0 42127.7 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.showColor = 1 1 1 1
+/Attach_1/Mass2/DOF_Mass_2.velocity = -0.931157 -2.63108e-42 -5578.19 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.constraint = 3 1 0 1 0 0 0 0 0  
+4 1 0 0 1 0 0 0 0  
+5 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass2/DOF_Mass_2.free_velocity = -0.922378 -2.63108e-42 -6381.45 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.9(V_DERIV) = -0.407358 0 37271.1 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.10(V_DERIV) = -0.00614549 0 562.28 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.12(V_DERIV) = 0.00811849 2.3158e-44 -807.279 0 0 0
+/Attach_1/Mass2/DOF_Mass_2.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.velocity = 5.93561e-06 5.37205e-35 -5509.96 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = 6.00306e-06 5.37205e-35 -6482.31 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = -4.72135e-08 0 680.643 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = -3.12958e-09 0 45.1169 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.12(V_DERIV) = -6.30321e-08 -5.64066e-37 -961.986 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.velocity = 6.69262e-05 -3.4337e-30 -5492.43 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = 6.60691e-05 -3.4337e-30 -6400.14 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.12(V_DERIV) = -6.55928e-07 3.40894e-32 -910.387 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = 3.97668e-08 0 42.1178 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = 5.9993e-07 0 635.398 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.force = 0 0 -455.184 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.velocity = 9.32444e-06 -3.05977e-19 -5494.85 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = 9.39705e-06 -3.57639e-19 -6422.62 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = -5.08271e-08 3.61634e-20 649.435 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = -3.36911e-09 2.39712e-21 43.0483 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.12(V_DERIV) = -9.50201e-08 3.61634e-21 -927.014 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.force = 0 0 -455.184 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.velocity = -3.13061e-05 -1.70508e-36 -5443.71 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.externalForce = 
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = 5.01119e-08 0 43.8267 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = 7.55998e-07 0 661.179 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = -3.23861e-05 -1.70508e-36 -6388.25 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.force = 0 0 -455.184 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.velocity = -3.13061e-05 -1.70508e-36 -5443.71 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.externalForce = 
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = 5.01119e-08 0 43.8267 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = 7.55998e-07 0 661.179 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = -3.23861e-05 -1.70508e-36 -6388.25 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.force = 0 0 -455.184 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.velocity = -3.13061e-05 -1.70508e-36 -5443.71 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.externalForce = 
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = 5.01119e-08 0 43.8267 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = 7.55998e-07 0 661.179 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = -3.23861e-05 -1.70508e-36 -6388.25 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Attach_1/Mass1/DOF_Mass_1.externalForce = 
+/Attach_1/Mass1/DOF_Mass_1.force = 0 0 -455.184 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.velocity = 0.000613482 -8.33267e-81 -5190.36 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.10(V_DERIV) = 5.07131e-06 0 802.879 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Attach_1/Mass1/DOF_Mass_1.9(V_DERIV) = 3.36155e-07 0 53.2194 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.free_velocity = 0.000606237 -8.33267e-81 -6337.33 0 0 0
+/Attach_1/Mass1/DOF_Mass_1.showColor = 1 1 1 1

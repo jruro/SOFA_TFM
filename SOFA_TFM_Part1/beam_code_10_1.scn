@@ -1,0 +1,91 @@
+<!-- BeamFEMForceField example -->
+<Node name="root" gravity="0 0 -9.81" dt="0.01">
+
+    <RequiredPlugin name="SofaOpenglVisual"/>
+    <VisualStyle displayFlags="showBehaviorModels showForceFields showCollision" />
+    <OglGrid size="0.5" name="grid"/>
+    <OglLineAxis size="@grid.size"/>
+    <OglSceneFrame/>
+
+    <GenericConstraintSolver tolerance="0.001" maxIterations="1000"/>
+
+    <DefaultPipeline depth="6" verbose="0" draw="0" />
+    <BruteForceDetection name="Detection" />
+    <MinProximityIntersection name="Proximity" alarmDistance="0.1" contactDistance="0.02" />
+    <DefaultContactManager name="Response" response="default" />
+    <DefaultCollisionGroupManager name="Group" />
+
+    <!--<Node name="NoAttach">
+        <EulerImplicitSolver rayleighStiffness="0.1" printLog="false" rayleighMass="0.1" />
+        <BTDLinearSolver template="BTDMatrix6d" printLog="false" verbose="false" />
+
+        <Node name="beam">
+            <MechanicalObject template="Rigid3d" name="beam_DOFs" position="0 0 0 0 0 0 1 0.1047 0 0 0 0 0 1 0.20956 0 0 0 0 0 1 0.3141 0 0 0 0 0 1 0.4188 0 0 0 0 0 1 0.5235 0 0 0 0 0 1 0.6282 0 0 0 0 0 1 0.7329 0 0 0 0 0 1" />
+            <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7" />
+            <UniformMass vertexMass="0.022375 1 [0.001 0 0,0 0.001 0,0 0 0.001]" />
+            <BeamFEMForceField name="FEM" radius="0.0025" youngModulus="70e9" poissonRatio="0.3"/>
+            <LinearSolverConstraintCorrection />
+
+            <FixedConstraint name="FixedConstraint" indices="0" />
+        </Node>
+    </Node>
+
+    <Node name="AttachOneWay">
+        <EulerImplicitSolver rayleighStiffness="0.1" printLog="false" rayleighMass="0.1" />
+        <BTDLinearSolver template="BTDMatrix6d" printLog="false" verbose="false" />
+
+        <Node name="beam">
+            <MechanicalObject template="Rigid3d" name="beam_DOFs" position="0 0.25 0 0 0 0 1 0.1047 0.25 0 0 0 0 1 0.20956 0.25 0 0 0 0 1 0.3141 0.25 0 0 0 0 1 0.4188 0.25 0 0 0 0 1 0.5235 0.25 0 0 0 0 1 0.6282 0.25 0 0 0 0 1 0.7329 0.25 0 0 0 0 1" />
+            <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7" />
+            <UniformMass vertexMass="0.022375 1 [0.001 0 0,0 0.001 0,0 0 0.001]" />
+            <BeamFEMForceField name="FEM" radius="0.0025" youngModulus="70e9" poissonRatio="0.3"/>
+            <LinearSolverConstraintCorrection />
+
+            <FixedConstraint name="FixedConstraint" indices="0" />
+
+            <Node name="ConstraintPoint">
+                <MechanicalObject template="Rigid3d" name="dof" />
+                <SphereCollisionModel radius="0.02" group="1"/>
+                <RigidRigidMapping index="7" />
+            </Node>
+        </Node>
+
+        <Node name="mass_1">
+            <MechanicalObject template="Rigid3d" name="mass1_DOFs" position="0.7329 0.25 0 0 0 0 1"/>
+            <UniformMass vertexMass="200 10 0.01 0 0 0 0.01 0 0 0 0.01 0" printLog="false" />
+            <LinearSolverConstraintCorrection />
+            <SphereCollisionModel radius="0.02" group="1"/>
+
+            <Node name="ConstraintPoint">
+                <MechanicalObject template="Rigid3d" name="dof" />
+                <SphereCollisionModel radius="0.02" group="1"/>
+                <RigidRigidMapping index="0" />
+            </Node>
+        </Node>
+
+        <BilateralInteractionConstraint template="Rigid3d" object1="@beam/ConstraintPoint/dof" object2="@mass_1/ConstraintPoint/dof" first_point="0" second_point="0" />
+    </Node>-->
+
+    <Node name="AttachTwoWay">
+
+        <EulerImplicitSolver rayleighStiffness="0" printLog="false" rayleighMass="0.1" />
+        <CGLinearSolver template="CompressedRowSparseMatrix3d" iterations="25" name="linear solver" tolerance="1.0e-9" threshold="1.0e-9" />
+
+        <Node name="beam2">
+            <MechanicalObject template="Rigid3d" name="DOFs" position="0 0.5 0 0 0 0 1 0.1047 0.5 0 0 0 0 1 0.20956 0.5 0 0 0 0 1 0.3141 0.5 0 0 0 0 1 0.4188 0.5 0 0 0 0 1 0.5235 0.5 0 0 0 0 1 0.6282 0.5 0 0 0 0 1 0.7329 0.5 0 0 0 0 1" />
+            <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7" />
+            <UniformMass vertexMass="0.022375 1 0.001 0 0 0 0.001 0 0 0 0.001" />
+            <BeamFEMForceField name="FEM" radius="0.0025" youngModulus="70e9" poissonRatio="0.3"/>
+
+            <FixedConstraint name="FixedConstraint" indices="0" />
+        </Node>
+
+        <!--<Node name="mass_1">
+            <MechanicalObject template="Rigid3d" name="mass_1" />
+            <UniformMass vertexMass="100 1 0.01 0 0 0 0.01 0 0 0 0.01 0" printLog="false" />
+            <SphereCollisionModel radius="0.02" group="1"/>
+        </Node>
+
+        <AttachConstraint object1="@beam2" object2="@mass_1" indices1="7" indices2="0" />-->
+    </Node>
+</Node>

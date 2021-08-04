@@ -1,0 +1,193 @@
+<?xml version="1.0" ?>
+<Node 	 name="root"  gravity="0 0 -9810.0"  dt="0.7"  >
+
+    <RequiredPlugin pluginName="SofaOpenglVisual"/>
+    <RequiredPlugin pluginName='SofaBoundaryCondition'/>
+    <RequiredPlugin pluginName='SofaEngine'/>
+    <RequiredPlugin pluginName='SofaGeneralDeformable'/>
+    <RequiredPlugin pluginName='SofaImplicitOdeSolver'/>
+    <RequiredPlugin pluginName='SofaMeshCollision'/>
+    <RequiredPlugin pluginName='SofaMiscCollision'/>
+    <RequiredPlugin pluginName='SofaMiscFem'/>
+    <RequiredPlugin pluginName='SofaLoader'/> <!-- Needed to use components [MeshObjLoader, ]-->
+    <RequiredPlugin pluginName='SofaRigid'/> <!-- Needed to use components [RigidMapping, ]-->
+    <RequiredPlugin pluginName='SofaSimpleFem'/> <!-- Needed to use components [HexahedronFEMForceField, ]-->
+    <RequiredPlugin pluginName='SofaConstraint'/> <!-- Needed to use components [FreeMotionAnimationLoop, GenericConstraintSolver, BilateralInteractionConstraint, UncoupledConstraintCorrection, ]-->
+
+    <!-- Debemos poner un FreeMotion para que se consigan resolver los Constraints Billateral de forma correcta -->
+    <FreeMotionAnimationLoop />
+    <GenericConstraintSolver tolerance="0.001" maxIterations="1000"/>
+
+    <VisualStyle name="VisualOptions" displayFlags="hideBehavior hideMechanicalMappings showAdvancedRendering showWireframe hideCollision showVisual" />
+    <OglGrid size="1000" name="grid"/>
+    <OglLineAxis size="@grid.size"/>
+    <OglSceneFrame/>
+
+    <DefaultPipeline name="DefaultCollisionPipeline"  verbose="0"  draw="0"  depth="6" />
+    <BruteForceDetection name="Detection" />
+    <MinProximityIntersection name="Proximity"  alarmDistance="0.7"  contactDistance="0.09" />
+    <DefaultContactManager name="Response"  response="default" />
+    <DefaultCollisionGroupManager />
+
+    <Node name="Attach_1">
+
+	    <Node name="Beam"  gravity="0 0 -9810.0">
+
+			     <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
+	    		 <CGLinearSolver name="Conjugate Gradient" template="GraphScattered" iterations="25" tolerance="1e-5" threshold="1e-5"/>
+			     <!--<SparseGridTopology name="Embedded Sparse Grid"  fileTopology="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj"  n="2 2 3" />-->
+           <!--<SparseGridTopology name="Embedded Sparse Grid"  fileTopology="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj"  n="2 2 7" />-->
+           <!--<SparseGridTopology name="Embedded Sparse Grid"  fileTopology="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj"  n="2 2 5" />-->
+          <!-- <SparseGridTopology name="Embedded Sparse Grid"  fileTopology="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj"  n="2 2 11" />-->
+           <!--<SparseGridTopology name="Embedded Sparse Grid"  fileTopology="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj"  n="2 2 21" />-->
+           <SparseGridTopology name="Embedded Sparse Grid"  fileTopology="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj"  n="2 2 121" />
+			     <MechanicalObject template="Vec3d" name="Particles"  translation="-732 0 -1.51"  rotation="90 0 90" restScale="1" externalForce="0 0 0"/>
+			     <UniformMass template="Vec3d,double" name="MassBeam" totalMass="0.17906"/>
+           <UncoupledConstraintCorrection />
+
+           <!--ForceFields are components that are adding “forces” -->
+           <!-- Se trata de un plano de fuerza fijo -->
+           <!--<PlaneForceField template="Vec3d" name="Plane" normal="0 0 1" d="-10" bilateral="1" showPlane="0" showPlaneSize="1000"/>-->
+
+    			 <HexahedronFEMForceField template="Vec3d" name="FEM" poissonRatio="0.33" youngModulus="70000000000"  gatherPt=" "  gatherBsize=" "/>
+
+           <!-- Apply sinusoidal trajectories to particles. Defined as $ x = x_m A \sin ( \omega t + \phi )$ where $ x_m, A , \omega t , \phi $
+           are the mean value, the amplitude, the pulsation and the phase, respectively.-->
+           <!-- Los parametros a determianr son: [index,Mean(x,y,z),amplitude(x,y,z),pulsation,phase]-->
+           <!-- amplitude = 100 mm -->
+
+           <!-- Esta es la simulacion real, mas rapida y con menos nodos, simula un movimiento real pero no consigue el armónico numero 1 -->
+    			 <!--<OscillatorConstraint name="OscillatingConstraint" oscillators="1 1.13687e-13 -7.65 -1.5402 0 0 200 15.993 0" />
+    			 <OscillatorConstraint name="OscillatingConstraint" oscillators="4 1.13687e-13 -7.65  1.5402 0 0 200 15.993 0" />
+    			 <OscillatorConstraint name="OscillatingConstraint" oscillators="7 1.13687e-13  7.65 -1.5402 0 0 200 15.993 0" />
+    			 <OscillatorConstraint name="OscillatingConstraint" oscillators="10 1.13687e-13  7.65  1.5402 0 0 200 15.993 0" />-->
+
+           <!-- Muy flexible, no consigue el armónico numero 1 en todos los ciclos -->
+           <!--<OscillatorConstraint name="OscillatingConstraint" oscillators="3 1.13687e-13 -7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint" oscillators="10 1.13687e-13 -7.65  1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint" oscillators="17 1.13687e-13  7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint" oscillators="24 1.13687e-13  7.65  1.5402 0 0 10 16.993 0" />-->
+
+           <!--<OscillatorConstraint name="OscillatingConstraint1" oscillators="2 1.13687e-13 -7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint2" oscillators="7 1.13687e-13 -7.65  1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint3" oscillators="12 1.13687e-13  7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint4" oscillators="17 1.13687e-13  7.65  1.5402 0 0 10 16.993 0" />-->
+
+           <!--<OscillatorConstraint name="OscillatingConstraint1" oscillators="5 1.13687e-13 -7.65 -1.5402 0 0 100 0.38 0" />
+           <OscillatorConstraint name="OscillatingConstraint2" oscillators="16 1.13687e-13 -7.65  1.5402 0 0 100 0.38 0" />
+           <OscillatorConstraint name="OscillatingConstraint3" oscillators="27 1.13687e-13  7.65 -1.5402 0 0 100 0.38 0" />
+           <OscillatorConstraint name="OscillatingConstraint4" oscillators="38 1.13687e-13  7.65  1.5402 0 0 100 0.38 0" />-->
+
+           <!--<OscillatorConstraint name="OscillatingConstraint1" oscillators="5 1.13687e-13 -7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint2" oscillators="16 1.13687e-13 -7.65  1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint3" oscillators="27 1.13687e-13  7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint4" oscillators="38 1.13687e-13  7.65  1.5402 0 0 10 16.993 0" />-->
+
+           <!--<OscillatorConstraint name="OscillatingConstraint1" oscillators="10 1.13687e-13 -7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint2" oscillators="31 1.13687e-13 -7.65  1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint3" oscillators="52 1.13687e-13  7.65 -1.5402 0 0 10 16.993 0" />
+           <OscillatorConstraint name="OscillatingConstraint4" oscillators="73 1.13687e-13  7.65  1.5402 0 0 10 16.993 0" />-->
+
+           <OscillatorConstraint name="OscillatingConstraint1" oscillators="59 1.13687e-13 -7.65 -1.5402 0 0 10 1.6993 0" />
+           <OscillatorConstraint name="OscillatingConstraint2" oscillators="178 1.13687e-13 -7.65  1.5402 0 0 10 1.6993 0" />
+           <OscillatorConstraint name="OscillatingConstraint3" oscillators="297 1.13687e-13  7.65 -1.5402 0 0 10 1.6993 0" />
+           <OscillatorConstraint name="OscillatingConstraint4" oscillators="416 1.13687e-13  7.65  1.5402 0 0 10 1.6993 0" />
+
+           <!-- Fija una restricción para el movimiento de los cuerpos, en este caso, el plano x,y o z = 0, tal y como se
+           especifique en la direction -->
+           <!-- Proyecta las particulas en un plano dado -->>
+ 			     <FixedPlaneConstraint direction="0 1 0" dmin="-8" dmax="8" />
+
+      			<Node 	name="CollisionNode"   >
+      			    <MeshObjLoader name="loader"  filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj" />
+      			    <MeshTopology src="@loader" />
+      			    <MechanicalObject />
+      			    <TriangleCollisionModel  contactFriction="1" contactStiffness="10" />
+      			    <LineCollisionModel contactFriction="1"  contactStiffness="10" />
+      			    <PointCollisionModel  contactFriction="1"  contactStiffness="10"  />
+      			    <BarycentricMapping input="@.." output="@." />
+      			</Node>
+
+      			<Node name="VisualNode"  gravity="0 0 -9810.0"  >
+      				<MeshObjLoader name="meshLoader_0" filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/beam_1_0_meshmixer.obj" handleSeams="1"/>
+      				<OglModel template="Vec3d" name="Objective_beam" src="@meshLoader_0"  sfactor="GL_SRC_ALPHA"  dfactor="GL_ONE_MINUS_SRC_ALPHA"/>
+      				<BarycentricMapping template="Vec3d,Vec3d" name="Visual Mapping"  input="@../"  output="@Objective_beam"/>
+      			</Node>
+
+            <!-- This engine finds the topological primitives which are inside a given box -->
+            <!-- queda definida por 6 parámetros: (xmin,ymin,zmin, xmax,ymax,zmax) -->
+      			<BoxROI name="box_roi" box="-10 -10 -10 10 10 10" drawBoxes="1"/>
+      			<FixedConstraint template="Vec3d" indices="@[-1].indices" />
+
+            <!-- Necesitamos añadir un nodo de Constraint para que se pueda unir luego al nodo Constraint de la masa correspondiente -->
+            <!-- Es necesario colocar el punto de Constraint cerca del extremo de la barra -->
+            <Node name="ConstraintPoint_beam_2">
+                <MechanicalObject name="points_beam" template="Vec3d" position="0 3.7 21" />
+                <BarycentricMapping/>
+            </Node>
+
+            <!-- Creamos el nodo de Constraint para la masa 2, con su correspondiente posicion, teniendo en cuenta el
+            BarycentricMapping que se ha realizado respecto a las coordenadas del MechanicalObject de la barra -->
+            <Node name="ConstraintPoint_beam_1">
+                <MechanicalObject name="points_beam" template="Vec3d" position="0 3.7 1443" />
+                <BarycentricMapping/>
+            </Node>
+      </Node>
+
+      <Node name="Mass1" gravity="0 0 -9810.0">
+
+            <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
+            <CGLinearSolver name="Conjugate Gradient" iterations="25" tolerance="1e-5" threshold="1e-5"/>
+
+            <MechanicalObject template="Rigid3d" name="DOF_Mass_1"  position="711 0 2.11 0.7071068 0 0 0.7071068"/>
+            <UniformMass name="MassSolid1" totalMass="0.0464" />
+            <UncoupledConstraintCorrection />
+
+            <Node name="VisualNode_1">
+                <MeshObjLoader name="meshLoader_0" filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/Sphere.obj" handleSeams="1" />
+                <OglModel name="Visual" src="@meshLoader_0"  />
+                <RigidMapping name="Visual Mapping 1" input="@../"  output="@Visual"/>
+            </Node>
+
+            <FixedPlaneConstraint direction="1 0 0" dmin="-25" dmax="25" />
+
+            <!-- Al igual que en la barra, en la masa se crea un nodo de Constraint en el que se especifican los dos puntos que forman parte
+            del Constraint, en este caso los dos puntos deben coicidir, de lo contrario se moverán mucho -->
+            <Node name="ConstraintPoint_mass_1">
+                <MechanicalObject name="points_mass_1" template="Vec3d" position="0 0 0&#x09;0 0 0" />
+                <RigidMapping/>
+            </Node>
+      </Node>
+
+      <!-- Esta sentencia lo que hace es añadir la restricción fija, uniendo los dos objetos por las coordenadas definidas en sus
+      respectivas posiciones, indicando aqui solamente el indice -->
+      <BilateralInteractionConstraint template="Vec3d" object1="@Beam/ConstraintPoint_beam_1/points_beam" object2="@Mass1/ConstraintPoint_mass_1/points_mass_1" first_point="0" second_point="0" />
+
+      <Node name="Mass2" gravity="0 0 -9810.0">
+
+            <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
+            <CGLinearSolver name="Conjugate Gradient" iterations="25" tolerance="1e-5" threshold="1e-5"/>
+
+            <MechanicalObject template="Rigid3d" name="DOF_Mass_2"  position="-711 0 2.11 0.7071068 0 0 0.7071068"/>
+            <UniformMass name="MassSolid2" totalMass="0.0464" />
+            <UncoupledConstraintCorrection />
+
+            <Node name="VisualNode_2">
+                <MeshObjLoader name="meshLoader_1" filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/Sphere.obj" handleSeams="1" />
+                <OglModel name="Visual" src="@meshLoader_1"  />
+                <RigidMapping name="Visual Mapping 2" input="@../"  output="@Visual"/>
+            </Node>
+
+            <FixedPlaneConstraint direction="1 0 0" dmin="-25" dmax="25" />
+
+            <Node name="ConstraintPoint_mass_2">
+                <MechanicalObject name="points_mass_2" template="Vec3d" position="0 0 0&#x09;0 0 0" />
+                <RigidMapping />
+            </Node>
+      </Node>
+
+      <BilateralInteractionConstraint template="Vec3d" object1="@Beam/ConstraintPoint_beam_2/points_beam" object2="@Mass2/ConstraintPoint_mass_2/points_mass_2" first_point="0" second_point="0" />
+
+  </Node>
+
+</Node>

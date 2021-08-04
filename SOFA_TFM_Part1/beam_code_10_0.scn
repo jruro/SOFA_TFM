@@ -1,0 +1,74 @@
+
+<?xml version="1.0" ?>
+<Node 	 name="root"  gravity="0 0 -9.8100"  dt="0.01"  >
+
+    <RequiredPlugin pluginName="SofaOpenglVisual"/>
+    <RequiredPlugin pluginName='SofaBoundaryCondition'/>
+    <RequiredPlugin pluginName='SofaEngine'/>
+    <RequiredPlugin pluginName='SofaGeneralDeformable'/>
+    <RequiredPlugin pluginName='SofaImplicitOdeSolver'/>
+    <RequiredPlugin pluginName='SofaMeshCollision'/>
+    <RequiredPlugin pluginName='SofaMiscCollision'/>
+    <RequiredPlugin pluginName='SofaMiscFem'/>
+    <RequiredPlugin pluginName='SofaLoader'/> <!-- Needed to use components [MeshObjLoader, ]-->
+    <RequiredPlugin pluginName='SofaRigid'/> <!-- Needed to use components [RigidMapping, ]-->
+    <RequiredPlugin pluginName='SofaSimpleFem'/> <!-- Needed to use components [HexahedronFEMForceField, ]-->
+    <RequiredPlugin pluginName='SofaConstraint'/> <!-- Needed to use components [FreeMotionAnimationLoop, GenericConstraintSolver, BilateralInteractionConstraint, UncoupledConstraintCorrection, ]-->
+    <RequiredPlugin pluginName='SofaGeneralLinearSolver'/> <!-- Needed to use components [BTDLinearSolver, ]-->
+    <RequiredPlugin pluginName='SofaGeneralSimpleFem'/> <!-- Needed to use components [BeamFEMForceField, ]-->
+    <RequiredPlugin pluginName='SofaMiscMapping'/> <!-- Needed to use components [BeamLinearMapping, ]-->
+
+    <!-- Debemos poner un FreeMotion para que se consigan resolver los Constraints Billateral de forma correcta -->
+    <FreeMotionAnimationLoop />
+    <GenericConstraintSolver tolerance="0.001" maxIterations="1000"/>
+
+    <VisualStyle displayFlags="showBehaviorModels showForceFields showCollisionModels" />
+
+    <OglGrid size="1000" name="grid"/>
+    <OglLineAxis size="@grid.size"/>
+    <OglSceneFrame/>
+
+    <!-- <Simulation name="Simulation" /> -->
+    <DefaultPipeline name="DefaultCollisionPipeline"  verbose="0"  draw="0"  depth="6" />
+    <BruteForceDetection name="Detection" />
+    <MinProximityIntersection name="Proximity"  alarmDistance="0.03"  contactDistance="0.02" />
+    <DefaultContactManager name="Response"  response="default" />
+    <DefaultCollisionGroupManager />
+
+
+    <Node name="AttachOneWay"> <!-- Beam with mass at free end -->
+        <EulerImplicitSolver rayleighStiffness="0.1" printLog="false" rayleighMass="0.1" />
+        <BTDLinearSolver template="BTDMatrix6d" printLog="false" verbose="false" />
+
+        <Node name="beam">
+            <MechanicalObject template="Rigid3d" name="beam_DOFs" position="0 0.25 0 0 0 0 1 0.1047 0.25 0 0 0 0 1 0.20956 0.25 0 0 0 0 1 0.3141 0.25 0 0 0 0 1 0.4188 0.25 0 0 0 0 1 0.5235 0.25 0 0 0 0 1 0.6282 0.25 0 0 0 0 1 0.7329 0.25 0 0 0 0 1" />
+            <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7" />
+            <UniformMass vertexMass="0.022375 1 [0.001 0 0,0 0.001 0,0 0 0.001]" />
+            <BeamFEMForceField name="FEM" radius="0.0025" youngModulus="70e9" poissonRatio="0.3"/>
+            <LinearSolverConstraintCorrection />
+
+            <FixedConstraint name="FixedConstraint" indices="0" />
+
+            <Node name="ConstraintPoint">
+                <MechanicalObject template="Rigid3d" name="dof" />
+                <SphereCollisionModel radius="0.02" group="1"/>
+                <RigidRigidMapping index="7" />
+            </Node>
+        </Node>
+
+        <Node name="mass_1">
+            <MechanicalObject template="Rigid3d" name="mass1_DOFs" position="0.7329 0.25 0 0 0 0 1"/>
+            <UniformMass vertexMass="200 10 0.01 0 0 0 0.01 0 0 0 0.01 0" printLog="false" />
+            <LinearSolverConstraintCorrection />
+            <SphereCollisionModel radius="0.02" group="1"/>
+
+            <Node name="ConstraintPoint">
+                <MechanicalObject template="Rigid3d" name="dof" />
+                <SphereCollisionModel radius="0.02" group="1"/>
+                <RigidRigidMapping index="0" />
+            </Node>
+        </Node>
+
+        <BilateralInteractionConstraint template="Rigid3d" object1="@beam/ConstraintPoint/dof" object2="@mass_1/ConstraintPoint/dof" first_point="0" second_point="0" />
+    </Node>
+</Node>
