@@ -1,0 +1,21 @@
+
+--- NEW SESSION: 22/06/2021 12:41:25 ---
+/Mass1/DOF_Mass_1.reserve = 4
+/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Mass1/DOF_Mass_1.showColor = 1 1 1 1
+/Mass1/DOF_Mass_1.rotation = 32.71 0 0
+
+--- NEW SESSION: 22/06/2021 13:13:41 ---
+/Mass1/DOF_Mass_1.velocity = 23.152 5.92763e-08 2.1979 0 0 0
+/Mass1/DOF_Mass_1.free_velocity = 20.1349 2.32263e-07 6.80462 0 0 0
+/Mass1/DOF_Mass_1.constraint = 0 1 0 1 0 0 0 0 0  
+1 1 0 0 1 0 0 0 0  
+2 1 0 0 0 1 0 0 0  
+
+/Mass1/DOF_Mass_1.9(V_DERIV) = 0.139997 -8.02656e-09 -0.213752 0 0 0
+/Mass1/DOF_Mass_1.10(V_DERIV) = 0.0150859 -8.64931e-10 -0.0230336 0 0 0
+/Mass1/DOF_Mass_1.12(V_DERIV) = -0.0100674 -1.16131e-10 -0.0524523 0 0 0
+/Mass1/DOF_Mass_1.showColor = 1 1 1 1
