@@ -1,0 +1,149 @@
+<!-- BeamFEMForceField example -->
+<?xml version="1.0"?>
+<Node name="root" gravity="0 0 -9.81" dt="0.005">
+
+  <RequiredPlugin pluginName="SofaOpenglVisual"/>
+  <RequiredPlugin pluginName='SofaBoundaryCondition'/>
+  <RequiredPlugin pluginName='SofaEngine'/>
+  <RequiredPlugin pluginName='SofaGeneralDeformable'/>
+  <RequiredPlugin pluginName='SofaImplicitOdeSolver'/>
+  <RequiredPlugin pluginName='SofaMeshCollision'/>
+  <RequiredPlugin pluginName='SofaMiscCollision'/>
+  <RequiredPlugin pluginName='SofaMiscFem'/>
+  <RequiredPlugin pluginName='SofaLoader'/> <!-- Needed to use components [MeshObjLoader, ]-->
+  <RequiredPlugin pluginName='SofaRigid'/> <!-- Needed to use components [RigidMapping, ]-->
+  <RequiredPlugin pluginName='SofaConstraint'/> <!-- Needed to use components [FreeMotionAnimationLoop, GenericConstraintSolver, BilateralInteractionConstraint, UncoupledConstraintCorrection, ]-->
+  <RequiredPlugin pluginName='SofaGeneralLinearSolver'/> <!-- Needed to use components [BTDLinearSolver, ]-->
+  <RequiredPlugin pluginName='SofaGeneralSimpleFem'/> <!-- Needed to use components [BeamFEMForceField, ]-->
+  <RequiredPlugin pluginName='SofaGeneralTopology'/> <!-- Needed to use components [CubeTopology, ]-->
+  <RequiredPlugin pluginName='SofaMiscMapping'/> <!-- Needed to use components [BeamLinearMapping, ]-->
+  <RequiredPlugin pluginName='SofaSparseSolver'/> <!-- Needed to use components [SparseLUSolver, ]-->
+    <RequiredPlugin pluginName='SofaMiscSolver'/> <!-- Needed to use components [NewmarkImplicitSolver, ]-->
+
+  <FreeMotionAnimationLoop />
+  <GenericConstraintSolver tolerance="0.001" maxIterations="10000"/>
+
+  <OglGrid size="1" name="grid"/>
+  <OglLineAxis size="@grid.size"/>
+  <OglSceneFrame/>
+
+  <VisualStyle displayFlags="showForceFields showCollisionModels" />
+  <DefaultPipeline depth="6" verbose="0" draw="0" />
+  <BruteForceDetection name="N2" />
+  <MinProximityIntersection name="Proximity" alarmDistance="0.03" contactDistance="0.02" />
+  <DefaultContactManager name="Response" response="default" />
+
+  <Node name="beam">
+
+      <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
+      <MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>
+      <MechanicalObject template="Rigid3d" name="beam_DOFs" position="-0.7329 0 0 0 0 0 1 -0.706725 0 0 0 0 0 1 -0.68055 0 0 0 0 0 1 -0.654375 0 0 0 0 0 1 -0.6282 0 0 0 0 0 1
+                                                                      -0.602025 0 0 0 0 0 1 -0.57585 0 0 0 0 0 1 -0.549675 0 0 0 0 0 1 -0.5235 0 0 0 0 0 1 -0.497325 0 0 0 0 0 1
+                                                                      -0.47115 0 0 0 0 0 1 -0.444975 0 0 0 0 0 1 -0.4188 0 0 0 0 0 1 -0.392625 0 0 0 0 0 1 -0.36645 0 0 0 0 0 1
+                                                                      -0.340275 0 0 0 0 0 1 -0.3141 0 0 0 0 0 1 -0.287925 0 0 0 0 0 1 -0.26175 0 0 0 0 0 1 -0.235575 0 0 0 0 0 1
+                                                                      -0.20956 0 0 0 0 0 1 -0.183225 0 0 0 0 0 1 -0.15705 0 0 0 0 0 1 -0.130875 0 0 0 0 0 1 -0.1047 0 0 0 0 0 1
+                                                                      -0.078525 0 0 0 0 0 1 -0.05235 0 0 0 0 0 1 -0.026175 0 0 0 0 0 1 0 0 0 0 0 0 1 0.026175 0 0 0 0 0 1
+                                                                      0.05235 0 0 0 0 0 1 0.078525 0 0 0 0 0 1 0.1047 0 0 0 0 0 1 0.130875 0 0 0 0 0 1 0.15705 0 0 0 0 0 1
+                                                                      0.183225 0 0 0 0 0 1 0.20956 0 0 0 0 0 1 0.235575 0 0 0 0 0 1 0.26175 0 0 0 0 0 1 0.287925 0 0 0 0 0 1
+                                                                      0.3141 0 0 0 0 0 1 0.340275 0 0 0 0 0 1 0.36645 0 0 0 0 0 1 0.392625 0 0 0 0 0 1 0.4188 0 0 0 0 0 1
+                                                                      0.444975 0 0 0 0 0 1 0.47115 0 0 0 0 0 1 0.497325 0 0 0 0 0 1 0.5235 0 0 0 0 0 1 0.549675 0 0 0 0 0 1
+                                                                      0.57585 0 0 0 0 0 1 0.602025 0 0 0 0 0 1 0.6282 0 0 0 0 0 1 0.654375 0 0 0 0 0 1 0.68055 0 0 0 0 0 1
+                                                                      0.706725 0 0 0 0 0 1 0.7329 0 0 0 0 0 1"/>
+      <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26
+                                        26 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 34 35 35 36 36 37 37 38 38 39 39 40 40 41 41 42 42 43 43 44 44 45 45 46 46 47 47 48 48 49
+                                        49 50 50 51 51 52 52 53 53 54 54 55 55 56"/>
+
+      <FixedConstraint name="FixedConstraint" indices="28" />
+
+      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="28  0 0 0 0 0 0 1  0 0 0.01 0 0 0  19.5 0" />
+
+      <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
+      <!--<UniformMass template="Rigid3d,RigidMass<3u,double>" name="MassBeam" totalMass="0.17906"/>-->
+      <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
+      <UncoupledConstraintCorrection/>
+
+      <Node name="VisualNode_beam">
+        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.075 -0.0151" max="56 0.075 0.0151" />
+        <OglModel name="Visual" color="1 1 0 1.0" />
+        <BeamLinearMapping isMechanical="true" />
+      </Node>
+
+      <Node name="Collision_beam">
+        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.075 -0.0151" max="56 0.075 0.0151" />
+        <MechanicalObject />
+        <BeamLinearMapping isMechanical="true" />
+        <TriangleCollisionModel />
+      </Node>
+
+      <Node name="ConstraintPoint_beam_2">
+          <MechanicalObject name="points_beam" template="Vec3d" position="0.021 0 0" />
+          <RigidMapping index="0"/>
+      </Node>
+
+      <Node name="ConstraintPoint_beam_1">
+          <MechanicalObject name="points_beam" template="Vec3d" position="-0.021 0 0" />
+          <RigidMapping index="56"/>
+      </Node>
+
+  </Node>
+
+  <Node name="Mass1">
+
+        <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
+        <MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>
+
+        <MechanicalObject template="Rigid3d" name="DOF_Mass_1"  position="-0.711 0 0 0.7071068 0 0 0.7071068"/>
+        <UniformMass name="MassSolid1" totalMass="0.0464" />
+        <UncoupledConstraintCorrection />
+
+        <Node name="Visual_mass1">
+            <MeshObjLoader name="meshLoader_2" filename="mesh/sphere.obj" handleSeams="1" scale3d="0.022 0.022 0.022" translation="0 0 0" />
+            <OglModel name="Visual" src="@meshLoader_2" color="1 1 0 1.0" />
+            <RigidMapping input="@.." output="@Visual" />
+        </Node>
+
+        <Node name="Collision_mass1">
+            <MechanicalObject />
+            <SphereCollisionModel radius="0.0215"/>
+            <RigidMapping index="0"/>
+        </Node>
+
+        <Node name="ConstraintPoint_mass_1">
+            <MechanicalObject name="points_mass_1" template="Vec3d" position="0 0 0&#x09;0 0 0" />
+            <RigidMapping index="0"/>
+        </Node>
+  </Node>
+
+  <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_2/points_beam" object2="@Mass1/ConstraintPoint_mass_1/points_mass_1" first_point="0" second_point="0" />
+
+  <Node name="Mass2">
+
+        <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
+        <MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>
+
+        <MechanicalObject template="Rigid3d" name="DOF_Mass_1"  position="0.711 0 0 0.7071068 0 0 0.7071068"/>
+        <UniformMass name="MassSolid2" totalMass="0.0464" />
+        <UncoupledConstraintCorrection />
+
+        <Node name="Visual_mass2">
+            <MeshObjLoader name="meshLoader_2" filename="mesh/sphere.obj" handleSeams="1" scale3d="0.022 0.022 0.022" translation="0 0 0" />
+            <OglModel name="Visual" src="@meshLoader_2" color="1 1 0 1.0" />
+            <RigidMapping input="@.." output="@Visual" />
+        </Node>
+
+        <Node name="Collision_mass2">
+            <MechanicalObject />
+            <SphereCollisionModel radius="0.0215"/>
+            <RigidMapping index="0"/>
+        </Node>
+
+        <Node name="ConstraintPoint_mass_2">
+            <MechanicalObject name="points_mass_2" template="Vec3d" position="0 0 0&#x09;0 0 0" />
+            <RigidMapping index="0"/>
+        </Node>
+
+  </Node>
+
+  <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_1/points_beam" object2="@Mass2/ConstraintPoint_mass_2/points_mass_2" first_point="0" second_point="0" />
+
+</Node>
