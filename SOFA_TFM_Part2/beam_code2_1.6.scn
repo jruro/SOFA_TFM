@@ -117,7 +117,7 @@
         <MeshTopology name="lines" lines="0 1 1 2" />
 
         <UniformMass totalMass="0.01" printLog="false" />
-        <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
+        <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e6" poissonRatio="0.33"/>
         <UncoupledConstraintCorrection/>
 
         <Node name="VisualNode_beam">
@@ -139,13 +139,13 @@
         </Node>
 
         <Node name="ConstraintPoint_Leg_2">
-            <MechanicalObject name="points_Leg_2" template="Vec3d" position="0.2645 0 0" />
-            <RigidMapping index="0"/>
+            <MechanicalObject name="points_Leg_2" template="Vec3d" position="0 0 0" />
+            <RigidMapping index="2"/>
         </Node>
 
   </Node>
 
-  <BilateralInteractionConstraint template="Vec3d" object1="@Hip_body/ConstraintPoint_hip/points_hip" object2="@Leg/ConstraintPoint_Leg_1/points_Leg_1" first_point="0" second_point="0" />
+  <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_1/points_beam_1" object2="@Leg/ConstraintPoint_Leg_1/points_Leg_1" first_point="0" second_point="0" />
 
   <Node name="knee">
 
