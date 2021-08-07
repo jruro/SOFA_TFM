@@ -47,12 +47,13 @@
 
       <FixedConstraint name="FixedConstraint" indices="0" />
 
-      <!--<FixedConstraint name="FixedConstraint2" indices="0" />-->
+      <!--<FixedConstraint name="FixedConstraint2" indices="0" />
 
-      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="0  0 0 0 0 0 0 1  0 0 0.01 0 0 0  20.2 0" />
+      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="0  0 0 0 0 0 0 1  0 0 0.01 0 0 0  21.2 0" />-->
 
       <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
       <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
+      <FixedPlaneConstraint direction="0 1 0" dmin="-0.043" dmax="0.043" />
       <UncoupledConstraintCorrection/>
 
       <Node name="VisualNode_beam">
@@ -155,6 +156,7 @@
 
         <MechanicalObject template="Rigid3d" name="DOF_Mass_1"  position="0.7329 0 -0.2645 0.7071068 0 0 0.7071068"/>
         <UniformMass name="MassSolid2" totalMass="0.58" />
+        <FixedPlaneConstraint direction="0 1 0" dmin="-0.043" dmax="0.043" />
         <UncoupledConstraintCorrection />
 
         <Node name="Visual_mass2">
