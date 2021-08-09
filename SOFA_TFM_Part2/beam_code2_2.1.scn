@@ -24,17 +24,18 @@
   <OglGrid size="1" name="grid"/>
   <OglLineAxis size="@grid.size"/>
   <OglSceneFrame/>
-
   <VisualStyle displayFlags="showForceFields showCollisionModels showWireframe" />
-
   <DefaultPipeline depth="6" verbose="0" draw="0" />
   <BruteForceDetection name="N2" />
   <MinProximityIntersection name="Proximity" alarmDistance="0.03" contactDistance="0.02" />
   <DefaultContactManager name="Response" response="default" />
 
   <Node name="beam">
+
       <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
+
       <SparseLUSolver printLog="0" verbose="0"/>
+
       <MechanicalObject template="Rigid3d" name="beam_DOFs" position="0 0 0 0 0 0 1 0.026175 0 0 0 0 0 1
                                                                       0.05235 0 0 0 0 0 1 0.078525 0 0 0 0 0 1 0.1047 0 0 0 0 0 1 0.130875 0 0 0 0 0 1 0.15705 0 0 0 0 0 1
                                                                       0.183225 0 0 0 0 0 1 0.20956 0 0 0 0 0 1 0.235575 0 0 0 0 0 1 0.26175 0 0 0 0 0 1 0.287925 0 0 0 0 0 1
@@ -44,12 +45,14 @@
                                                                       0.706725 0 0 0 0 0 1 0.7329 0 0 0 0 0 1"/>
 
       <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26
-                                        26 27 27 28 28"/>
+                                        26 27 27 28"/>
 
       <FixedConstraint name="FixedConstraint" indices="0" />
 
       <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
+
       <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
+
       <UncoupledConstraintCorrection/>
 
       <Node name="VisualNode_beam">
@@ -75,15 +78,17 @@
   <Node name="Hip">
 
         <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
+
         <SparseLUSolver printLog="0" verbose="0"/>
 
         <MechanicalObject template="Rigid3d" name="DOFs2" position="0.7329 0 0 0.707107 0 -0.707107 0
+                                                                    0.7329 0 -0.001 0.707107 0 -0.707107 0
                                                                     0.7329 0 -0.1 0.707107 0 -0.707107 0
                                                                     0.7329 0 -0.2645 0.707107 0 -0.707107 0" />
-        <MeshTopology name="lines" lines="0 1 1 2" />
+        <MeshTopology name="lines" lines="0 1 1 2 2 3" />
 
         <UniformMass name="HipSolid2" totalMass="0.58" />
-        <!--<BeamFEMForceField name="FEM" poissonRatio="0.33" radius="0.01" youngModulus="70e9" />-->
+        <BeamFEMForceField name="FEM" poissonRatio="0.33" radius="0.01" youngModulus="70e9" />
         <FixedPlaneConstraint direction="0 1 0" dmin="-0.002" dmax="0.002" />
         <UncoupledConstraintCorrection />
 
@@ -110,14 +115,9 @@
             <MechanicalObject name="points_beam" template="Vec3d" position="0.2645 0 0" />
             <RigidMapping index="0"/>
         </Node>
-
-        <PartialLinearMovementConstraint template="Rigid3d" printLog="true" linearMovementBetweenNodesInIndices="true" indices="0" movedDirections="0 0 0 0 0 0 0" keyTimes="0 0.2 0.6 1.2 1.8" movements="0 0 0   0 0 0
-                          0 0 0   0 1 0
-                          0 0 0  0 -1 0
-                          0 0 0  0 1 0
-                          0 0 0   0 -1 0" />
-
-        <!--<BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_2/points_beam" object2="@ConstraintPoint_Hip_1/points_Hip_1" first_point="0" second_point="0" />-->
+        <!-- impose a motion to given DOFs (translation and rotation) in some directions only. The moved and free directioons are the same for all the particles, defined in the movedDirections attribute. The motion between 2 key times is linearly interpolated-->
+        <PartialLinearMovementConstraint template="Rigid3d" printLog="true" showMovement="true" indices="1" movedDirections="0 0 0 0 0 0 0" keyTimes="0 10" movements="0 0 0   0 0 0
+                          0 0 0   0 20 0" />
   </Node>
 
   <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_2/points_beam" object2="@Hip/ConstraintPoint_Hip_1/points_Hip_1" first_point="0" second_point="0" />

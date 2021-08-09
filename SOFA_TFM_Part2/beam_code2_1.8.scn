@@ -29,12 +29,13 @@
 
   <DefaultPipeline depth="6" verbose="0" draw="0" />
   <BruteForceDetection name="N2" />
-  <MinProximityIntersection name="Proximity" alarmDistance="0.03" contactDistance="0.02" />
+  <MinProximityIntersection name="Proximity" alarmDistance="0.3" contactDistance="0.2" />
   <DefaultContactManager name="Response" response="default" />
 
   <Node name="beam">
       <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
       <SparseLUSolver printLog="0" verbose="0"/>
+      <!--<MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>-->
       <MechanicalObject template="Rigid3d" name="beam_DOFs" position="0 0 0 0 0 0 1 0.026175 0 0 0 0 0 1
                                                                       0.05235 0 0 0 0 0 1 0.078525 0 0 0 0 0 1 0.1047 0 0 0 0 0 1 0.130875 0 0 0 0 0 1 0.15705 0 0 0 0 0 1
                                                                       0.183225 0 0 0 0 0 1 0.20956 0 0 0 0 0 1 0.235575 0 0 0 0 0 1 0.26175 0 0 0 0 0 1 0.287925 0 0 0 0 0 1
@@ -47,7 +48,7 @@
 
       <FixedConstraint name="FixedConstraint" indices="0 28" />
 
-      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="28  0.7329 0 0 0 0 0 1  0 0 0.1 0 0 0  21.2 0" />
+      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="28  0.7329 0 0 0 0 0 1  0 0 0.095 0 0 0  9.7 0" />
 
       <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
       <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
@@ -77,13 +78,8 @@
   <Node name="Hip_body">
 
     <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
-    <SparseLUSolver printLog="0" verbose="0"/>
-    <!--<MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>-->
-
+    <MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>
     <MechanicalObject template="Rigid3d" name="DOF_Mass_1"  position="0.7329 0 0 0.7071068 0 0 0.7071068"/>
-
-    <!--<OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="0  0.7329 0 0 0 0 0 1  0 0 0.1 0 0 0  21.2 0" />-->
-
     <UniformMass name="MassSolid2" totalMass="0.58" />
     <UncoupledConstraintCorrection />
 
@@ -111,10 +107,13 @@
   <Node name="Leg">
 
         <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
-        <SparseLUSolver printLog="0" verbose="0"/>
+        <!--<SparseLUSolver printLog="0" verbose="0"/>-->
+        <MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>
         <MeshObjLoader name="loader"  filename="mesh/cube.obj"  handleSeams="1" scale3d="0.007 0.001 0.135" translation="0.7329 0  0 0 0 0"/>
         <MeshTopology src="@loader"/>
+
         <MechanicalObject template="Rigid3d" name="DOFs2" position="0.7329 0 -0.13225 0 0 0 0" />
+
         <UniformMass totalMass="0.01" printLog="false" />
         <UncoupledConstraintCorrection />
 
