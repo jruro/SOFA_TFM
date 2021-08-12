@@ -63,7 +63,7 @@
 
       <FixedConstraint name="FixedConstraint" indices="28" />
 
-      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="28  0 0 0 0 0 0 1  0 0 0.01 0 0 0  19.8 0" />
+      <OscillatorConstraint template="Rigid3d" name="OscillatingConstraint1" oscillators="28  0 0 0 0 0 0 1  0 0 0.01 0 0 0  20.4 0" />
 
       <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
       <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>

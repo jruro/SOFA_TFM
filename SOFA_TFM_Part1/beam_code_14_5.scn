@@ -54,7 +54,7 @@ with Quasi-Resonant Compliant Backbone -->
       <MinResLinearSolver iterations="1000" tolerance="1e-9" printLog="1" verbose="0"/>
 
       <!-- The mechanical object is made up of as many points as you want, but taking into account that this will affect the bending of the beam. -->
-      <!--I started putting only 11 points, but after several attempts I realized that a number higher than 28 it didm't affect to the bending of the beam -->
+      <!--I started putting only 11 points, but after several attempts I realized that a number higher than 28 it didn't affect to the bending of the beam -->
       <MechanicalObject template="Rigid3d" name="beam_DOFs" position="-0.7329 0 0 0 0 0 1 -0.706725 0 0 0 0 0 1 -0.68055 0 0 0 0 0 1 -0.654375 0 0 0 0 0 1 -0.6282 0 0 0 0 0 1
                                                                       -0.602025 0 0 0 0 0 1 -0.57585 0 0 0 0 0 1 -0.549675 0 0 0 0 0 1 -0.5235 0 0 0 0 0 1 -0.497325 0 0 0 0 0 1
                                                                       -0.47115 0 0 0 0 0 1 -0.444975 0 0 0 0 0 1 -0.4188 0 0 0 0 0 1 -0.392625 0 0 0 0 0 1 -0.36645 0 0 0 0 0 1
@@ -83,7 +83,7 @@ with Quasi-Resonant Compliant Backbone -->
       <!-- We can add a third Monitor to show more specific parameters such as the minCoord, the maxCoord and the displacement of the selected DOFs. This parameters depend on the first Monitor. -->
       <ExtraMonitor template="Rigid3d" name="displacement_nodes" listening="1" indices="0 28 56" sizeFactor="1" minCoord="2" maxCoord="2" dispCoord="2"/>
 
-      <!-- It is necessaryto fix the central point of the beam, despite the OscillatorConstraint -->
+      <!-- It is necessary to fix the central point of the beam, despite the OscillatorConstraint -->
       <FixedConstraint name="FixedConstraint" indices="28" />
 
       <!-- Apply sinusoidal trajectories to particles. Defined as $ x = x_m*A*sin ( omega*t + phi ), where x_m, A , omega*t , phi are the mean value, the amplitude, the pulsation and the phase, respectively.-->
@@ -92,8 +92,12 @@ with Quasi-Resonant Compliant Backbone -->
 
       <!-- The mass of the beam is not the real mass, because if I put the real mass of 0.1796kg, the simulation is not correct, it is not real and the behavior is not the expected -->
       <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
-      <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/> <!-- This is the most suitable ForceField for the purpose of the simulation -->
-      <UncoupledConstraintCorrection/> <!-- We must add the UncoupledConstraintCorrection to solve the constraints -->
+
+      <!-- This is the most suitable ForceField for the purpose of the simulation -->
+      <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
+
+      <!-- We must add the UncoupledConstraintCorrection to solve the constraints -->
+      <UncoupledConstraintCorrection/>
 
       <!-- This is the visual node. We specify how we want to visualize the cube (with a CubeTopology), and the color of it. -->
       <!-- We must add a BeamLinearMapping to connect the visual node with the MechanicalObject -->
@@ -112,7 +116,7 @@ with Quasi-Resonant Compliant Backbone -->
         <TriangleCollisionModel />
       </Node>
 
-      <!-- We need to add a Constraint node. This is only a virtual node, shows as a pink point, that connects the beam to the Mass, via the BilateralInteractionConstraint -->
+      <!-- We need to add a Constraint node. This is only a virtual node, showed as a pink point, that connects the beam to the Mass, via the BilateralInteractionConstraint -->
       <!-- The index of the RigidMapping must be in accordance with the mass we want to connect after. -->
       <Node name="ConstraintPoint_beam_2">
           <MechanicalObject name="points_beam" template="Vec3d" position="0.021 0 0" />
