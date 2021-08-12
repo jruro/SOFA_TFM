@@ -83,16 +83,16 @@
                                                                     0.7329 0 -0.2645 0.707107 0 -0.707107 0" />
         <MeshTopology name="lines" lines="0 1 1 2" />
 
-        <Monitor template="Rigid3d" name="properties_0-28-56_7.2" listening="1" indices="0" showPositions="1" PositionsColor="1 1 0 1" ExportPositions="true" ExportVelocities="false" ExportForces="true" />
+        <Monitor template="Rigid3d" name="properties_0-28-56_7.4" listening="1" indices="0" showPositions="1" PositionsColor="1 1 0 1" ExportPositions="true" ExportVelocities="false" ExportForces="true" />
 
-        <ExtraMonitor template="Rigid3d" name="Energy_7.2" listening="1" indices="0 1 2" sizeFactor="1" ExportWcin="true" ExportWext="false" />
+        <ExtraMonitor template="Rigid3d" name="Energy_7.4" listening="1" indices="0 1 2" sizeFactor="1" ExportWcin="true" ExportWext="false" />
 
         <ExtraMonitor template="Rigid3d" name="displacement_nodes" listening="1" indices="0" sizeFactor="1" minCoord="2" maxCoord="2" dispCoord="2"/>
 
         <UniformMass name="HipSolid2" totalMass="0.58" />
 
         <!-- forces for a rigid is composed of two parts translation of the rigid dof [x y z] and a quaternion for the rotation [x y z w] -->
-        <ConstantForceField indices="0" forces="0 0 0  0 7.2 0 0" printLog="true"/>
+        <ConstantForceField indices="0" forces="0 0 0  0 7.5 0 0" printLog="true"/>
         <BeamFEMForceField name="FEM" poissonRatio="0.33" radius="0.01" youngModulus="70e9" />
         <FixedPlaneConstraint direction="0 1 0" dmin="-0.02" dmax="0.02" />
         <UncoupledConstraintCorrection />

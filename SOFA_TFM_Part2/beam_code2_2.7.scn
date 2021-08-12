@@ -1,7 +1,16 @@
-<!-- BeamFEMForceField example -->
 <?xml version="1.0"?>
-<Node name="root" gravity="0 0 -9.81" dt="0.0004">
+<!-- Final Master Degree PART 2 -->
+<!-- Author: Juan Rubio Romera -->
+<!-- Centro de Automática y Robótica -->
+<!-- Universidad Politécnica de Madrid -->
 
+<!-- Paper: Low Energy Consumption Quadrupedal Locomotion
+with Quasi-Resonant Compliant Backbone -->
+<!-- Author: Edgar A. Parra Ricaurte -->
+
+<Node name="root" gravity="0 0 -9.81" dt="0.0004"> <!-- We can adjust the step time to get more realistic results of the bending of the beam -->
+
+  <!-- Plugins required to run SOFA with all parameters -->
   <RequiredPlugin pluginName="SofaOpenglVisual"/>
   <RequiredPlugin pluginName='SofaBoundaryCondition'/>
   <RequiredPlugin pluginName='SofaEngine'/>
@@ -19,23 +28,34 @@
   <RequiredPlugin pluginName='SofaSparseSolver'/> <!-- Needed to use components [SparseLUSolver, ]-->
   <RequiredPlugin pluginName='SofaLoader'/> <!-- Needed to use components [MeshObjLoader, ]-->
 
-  <FreeMotionAnimationLoop />
-  <GenericConstraintSolver tolerance="0.001" maxIterations="10000"/>
+  <FreeMotionAnimationLoop /> <!-- As  there are constraints in the simulation, it is necessary to put the FreeMotionAnimationLoop -->
+  <FreeMotionAnimationLoop /> <!-- As  there are constraints in the simulation, it is necessary to put the FreeMotionAnimationLoop -->
+  <GenericConstraintSolver tolerance="0.001" maxIterations="10000"/> <!-- We add a GenericConstraintSolver to solve the BilateralInteractionConstraint -->
 
-  <OglGrid size="1" name="grid"/>
+  <OglGrid size="1" name="grid"/> <!-- A simple grid to show a plane -->
   <OglLineAxis size="@grid.size"/>
   <OglSceneFrame/>
 
-  <VisualStyle displayFlags="showForceFields showCollisionModels showWireframe" />
-
-  <DefaultPipeline depth="6" verbose="0" draw="0" />
+  <VisualStyle displayFlags="showForceFields showCollisionModels" /> <!-- These displayFlags are shown in the simulation. We can activate or deactivate them in order to see different features of the simulation. -->
+  <DefaultPipeline depth="6" verbose="0" draw="0" /> <!-- The DefaultPipeline is a Collision Pipeline. It performs steps related to the collision, mainly collision detection and collision response. -->
   <BruteForceDetection name="N2" />
-  <MinProximityIntersection name="Proximity" alarmDistance="0.03" contactDistance="0.02" />
-  <DefaultContactManager name="Response" response="default" />
+  <MinProximityIntersection name="Proximity" alarmDistance="0.03" contactDistance="0.02" /> <!-- This proximity method for intersection detection detects a possible contact as soon as pair of collision elements are close to each other (distance smaller than the alarmDistance) and creates contact (aka DetectionOutput) when the distance is lower than contactDistance.-->
+  <DefaultContactManager name="Response" response="default" /> <!-- A default response to solve the contact manager -->
 
+  <!-- Main object: beam -->
   <Node name="beam">
-      <EulerImplicitSolver rayleighStiffness="0" printLog="false" rayleighMass="0.1" />
+
+      <!-- We must use an Implicit solver because an Explicit Solver uses forces and this simulation doesn't require external forces. -->
+      <EulerImplicitSolver rayleighStiffness="0" printLog="false"  rayleighMass="0.1" />
+
+      <!-- This is the most important part of the simulation. I have used several solvers, both direct an indirect, and the best results for this part of the simulation are obtained using direct solvers -->
+      <!-- The only difference between direct and indirect solvers is the development of the simulation, since in the direct solvers the simulation is more fluent, with an iterative solver it can be seen the steps of the simulation, with very smalls stops. -->
+      <!-- So here I have used a direct solver because it is not necessary to use an OscillatorConstraint so it can not be possible to get an error -->
       <SparseLUSolver printLog="0" verbose="0"/>
+
+      <!-- The mechanical object is made up of as many points as you want, but taking into account that this will affect the bending of the beam. -->
+      <!--I started putting only 11 points, but after several attempts I realized that a number higher than 28 it didn't affect to the bending of the beam -->
+      <!-- The particularity of this part is that the beam starts from the origin to one corner, so it has only lines from 0 to 0.7329 -->
       <MechanicalObject template="Rigid3d" name="beam_DOFs" position="0 0 0 0 0 0 1 0.026175 0 0 0 0 0 1
                                                                       0.05235 0 0 0 0 0 1 0.078525 0 0 0 0 0 1 0.1047 0 0 0 0 0 1 0.130875 0 0 0 0 0 1 0.15705 0 0 0 0 0 1
                                                                       0.183225 0 0 0 0 0 1 0.20956 0 0 0 0 0 1 0.235575 0 0 0 0 0 1 0.26175 0 0 0 0 0 1 0.287925 0 0 0 0 0 1
@@ -43,29 +63,42 @@
                                                                       0.444975 0 0 0 0 0 1 0.47115 0 0 0 0 0 1 0.497325 0 0 0 0 0 1 0.5235 0 0 0 0 0 1 0.549675 0 0 0 0 0 1
                                                                       0.57585 0 0 0 0 0 1 0.602025 0 0 0 0 0 1 0.6282 0 0 0 0 0 1 0.654375 0 0 0 0 0 1 0.68055 0 0 0 0 0 1
                                                                       0.706725 0 0 0 0 0 1 0.7329 0 0 0 0 0 1"/>
+
+      <!-- MeshTopology must be in accordance with the MechanicalObject, so if I have put 29 points in the MechanicalObject, I must put from 0 to 28 lines as a MeshTopology. -->
       <MeshTopology name="lines" lines="0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26
                                         26 27 27 28"/>
 
+      <!-- It is necessary to fix the central point of the beam, despite the OscillatorConstraint -->
       <FixedConstraint name="FixedConstraint" indices="0" />
 
+      <!-- The mass of the beam is not the real mass, because if I put the real mass of 0.1796kg, the simulation is not correct, it is not real and the behavior is not the expected -->
       <UniformMass vertexMass="1 1 0.01 0 0 0 0.1 0 0 0 0.1" printLog="false" />
+
+      <!-- This is the most suitable ForceField for the purpose of the simulation -->
       <BeamFEMForceField name="FEM" radius="0.0107" youngModulus="70e9" poissonRatio="0.33"/>
 
+      <!-- We must add the UncoupledConstraintCorrection to solve the constraints -->
       <UncoupledConstraintCorrection/>
 
+      <!-- This is the visual node. We specify how we want to visualize the cube (with a CubeTopology), and the color of it. -->
+      <!-- We must add a BeamLinearMapping to connect the visual node with the MechanicalObject -->
       <Node name="VisualNode_beam">
-        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.075 -0.0151" max="28 0.075 0.0151" />
+        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.075 -0.0151" max="56 0.075 0.0151" />
         <OglModel name="Visual" color="1 1 0 1.0" />
         <BeamLinearMapping isMechanical="true" />
       </Node>
 
+      <!-- This is the collision node. As the visual node, we specify the topology of the collision (CubeTopology) and it is important to define a MechanicalObject in order to interact with the rest of the body. -->
+      <!-- Then, we define the type of the collision, in this case a TriangleCollisionModel, and the BeamLinearMapping again -->
       <Node name="Collision_beam">
-        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.075 -0.0151" max="28 0.075 0.0151" />
+        <CubeTopology nx="15" ny="2" nz="2" min="0 -0.075 -0.0151" max="56 0.075 0.0151" />
         <MechanicalObject />
         <BeamLinearMapping isMechanical="true" />
         <TriangleCollisionModel />
       </Node>
 
+      <!-- We need to add a Constraint node. This is only a virtual node, showed as a pink point, that connects the beam to the Mass, via the BilateralInteractionConstraint -->
+      <!-- The index of the RigidMapping must be in accordance with the mass we want to connect after. -->
       <Node name="ConstraintPoint_beam_2">
           <MechanicalObject name="points_beam" template="Vec3d" position="0 0 0 0 0 0 0 " />
           <RigidMapping index="28"/>
@@ -73,36 +106,52 @@
 
   </Node>
 
+  <!-- Object 2: Hip -->
   <Node name="Hip">
 
-        <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
-        <SparseLUSolver printLog="0" verbose="0"/>
+        <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" /> <!-- Same Solver as the beam. -->
+        <SparseLUSolver printLog="0" verbose="0"/> <!-- Same solver as the beam. It is not necessary to use a different solver. -->
 
+        <!-- The MechanicalObject is the same as the beam, but here I have used less lines -->
         <MechanicalObject template="Rigid3d" name="DOFs2" position="0.7329 0 0 0.707107 0 -0.707107 0
                                                                     0.7329 0 -0.127035 0.707107 0 -0.707107 0
                                                                     0.7329 0 -0.2645 0.707107 0 -0.707107 0" />
+
+        <!-- As I have created four points in the MechanicalObject, I create lines from 0 to 2 -->
         <MeshTopology name="lines" lines="0 1 1 2" />
 
-        <Monitor template="Rigid3d" name="properties_0-28-56_7.2" listening="1" indices="0" showPositions="1" PositionsColor="1 1 0 1" ExportPositions="true" ExportVelocities="false" ExportForces="true" />
+        <!-- This is the last update of the simulation. It only export position, velocity and forces of the selected DOFs, creating a .txt file in SOFA path. -->
+        <Monitor template="Rigid3d" name="properties_0-28-56_7" listening="1" indices="0" showPositions="1" PositionsColor="1 1 0 1" ExportPositions="true" ExportVelocities="false" ExportForces="true" />
 
-        <ExtraMonitor template="Rigid3d" name="Energy_7.2" listening="1" indices="0 1 2" sizeFactor="1" ExportWcin="true" ExportWext="false" />
+        <!-- A second monitor is needed to show the energies. The behavior is the same as the Monitor. -->
+        <ExtraMonitor template="Rigid3d" name="Energy_7" listening="1" indices="0 1 2" sizeFactor="1" ExportWcin="true" ExportWext="false" />
 
+        <!-- We can add a third Monitor to show more specific parameters such as the minCoord, the maxCoord and the displacement of the selected DOFs. This parameters depend on the first Monitor. -->
         <ExtraMonitor template="Rigid3d" name="displacement_nodes" listening="1" indices="0" sizeFactor="1" minCoord="2" maxCoord="2" dispCoord="2"/>
 
+        <!-- The real mass of 0.58kg, the simulation is not correct -->
         <UniformMass name="HipSolid2" totalMass="0.58" />
 
         <!-- forces for a rigid is composed of two parts translation of the rigid dof [x y z] and a quaternion for the rotation [x y z w] -->
-        <ConstantForceField indices="0" forces="0 0 0  0 7.2 0 0" printLog="true"/>
+        <ConstantForceField indices="0" forces="0 0 0  0 7.8 0 0" printLog="true"/>
+
+        <!-- This is the most suitable ForceField for the purpose of the simulation -->
         <BeamFEMForceField name="FEM" poissonRatio="0.33" radius="0.01" youngModulus="70e9" />
+
+        <!-- We must add the UncoupledConstraintCorrection to solve the constraints -->
+        <!-- We must add a FixedPlaneConstraint to ensure that the beam, the hip and the leg move in the Y-Z plane. This is because we need to simulate the movement of the system in a planar area, -->
+        <!-- without movements along the X-axis -->
         <FixedPlaneConstraint direction="0 1 0" dmin="-0.02" dmax="0.02" />
         <UncoupledConstraintCorrection />
 
+        <!-- The hip is a model built in Autodesk Inventor, so we need to load it to SOFA through an .obj file, with a color and connected to the MechanicalObject -->
         <Node name="Visual_mass1">
             <MeshObjLoader name="meshLoader_2" filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/Pata1_v1.obj" handleSeams="1" scale3d="0.001 0.001 0.001" rotation="-90 0 90" translation="0 -0.02 0" />
             <OglModel name="Visual" src="@meshLoader_2" color="1 1 0 1.0" />
             <RigidMapping input="@.." output="@Visual" />
         </Node>
 
+        <!-- The collision node is also from an .obj file created in Autodesk Inventor -->
         <Node 	name="CollisionNode"   >
             <MeshObjLoader name="loader"  filename="/home/juan/Escritorio/SOFA-features/beam_1_0_meshmixer/Pata1_v1.obj"  handleSeams="1" scale3d="0.001 0.001 0.001" rotation="-90 0 90" translation="0 -0.02 0" />
             <MeshTopology src="@loader" />
@@ -111,19 +160,24 @@
             <RigidMapping />
         </Node>
 
+        <!-- This is important to show a realistic simulation. The first node is the child node that is connected with the beam node at its edge -->
         <Node name="ConstraintPoint_Hip_1">
             <MechanicalObject name="points_Hip_1" template="Vec3d" position="0 0 0&#x09;0 0 0" />
             <RigidMapping index="0"/>
         </Node>
 
+        <!-- The second node of the hip is a father node, that is connected to the Leg node, as it shows the constraint node of the Leg -->
+        <!-- Note that the position of this node is 0.2645 meters away from the top of the Hip. This is the total length of the Hip. -->
         <Node name="ConstraintPoint_beam_1">
             <MechanicalObject name="points_beam" template="Vec3d" position="0.2645 0 0" />
             <RigidMapping index="0"/>
         </Node>
   </Node>
 
+  <!-- This is the connection between the bbeam and the Hip -->
   <BilateralInteractionConstraint template="Vec3d" object1="@beam/ConstraintPoint_beam_2/points_beam" object2="@Hip/ConstraintPoint_Hip_1/points_Hip_1" first_point="0" second_point="0" />
 
+  <!-- Object 3: Leg -->
   <Node name="Leg">
 
         <EulerImplicitSolver name="Implicit Euler Solver"  rayleighStiffness="0.1" rayleighMass="0.1" />
@@ -154,6 +208,7 @@
             <RigidMapping />
         </Node>
 
+        <!-- This node only needs one Constraint node because the leg is only connected with the Hip -->
         <Node name="ConstraintPoint_Leg">
             <MechanicalObject name="points_Leg" template="Vec3d" position="0 0 0&#x09;0 0 0" />
             <RigidMapping index="0"/>
